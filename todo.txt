@@ -1,0 +1,5 @@
+
+[] - Take picture
+[x] - Upload image
+[x] - Fill out form 
+[x] - Send
