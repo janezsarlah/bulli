@@ -280,6 +280,5 @@ body {
 @media (max-width: 768px) {
 	.gallery .image { width: 50%; }
 	#slide2.withBackground { background-color: transparent; }
-	#slide2.withBackground.upload { background-color: #78c9ba;; }
 
 }

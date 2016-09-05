@@ -13,6 +13,12 @@ $userData["lastname"] = htmlentities(isset($_POST["surname"]) ? $_POST["surname"
 $userData["email"] = htmlentities(isset($_POST["email"]) ? $_POST["email"] : "", ENT_QUOTES);
 $userData["image"] = htmlentities(isset($_POST["image"]) ? $_POST["image"] : "", ENT_QUOTES);
 
+/*
+var_dump($userData["image"]);
+die();
+return;
+*/
+
 foreach ($userData as $key => $value) {
 	if ($value == "")
 		return;
@@ -46,6 +52,7 @@ function convertBase64ToPng($userData, $userId, $db) {
 	$filename = $userId . "_" . time() . ".png";
 
 	$output_file = "img/uploads/" . $filename;
+	
 	$ifp = fopen($output_file, "wb"); 
 
     $data = explode(',', $userData['image']);
@@ -53,7 +60,7 @@ function convertBase64ToPng($userData, $userId, $db) {
     if (count($data) > 1){
         fwrite($ifp, base64_decode($data[1])); 
         fclose($ifp); 
-
+			
         return $filename; 
     }
 

@@ -52,6 +52,9 @@
             registerEvents: false,
             registerEvents: false,
             controlArrows: false,
+            afterSlideLoad: function(anchorLink, index, slideAnchor, slideIndex) {
+                //console.log("Index: " + slideIndex);
+            }
         });
         $.fn.fullpage.setAllowScrolling(false);
         callback();    

@@ -57,7 +57,7 @@ function init() {
 
 // Set fridge width
 function setFridgeBottom() {
-    //$drag.css({'top': ((dh / 2) - ($('#bul').height() / 2.5)) + 'px', 'left': '50%'});
+    $drag.css({'top': ((dh / 2) - ($('#bul').height() / 2.5)) + 'px', 'left': '50%'});
     $drag.css({'top': ((dh / 2) - ($('#bul1').height() / 2.5)) + 'px', 'left': '50%'});
 }
 

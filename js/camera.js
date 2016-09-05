@@ -94,8 +94,6 @@ function initCamera() {
 
 // Device dos't support camera
 function switcheToUpload() {
-	$('#slide2').addClass('upload');
-	
 	$camera.hide();
 	$upload.show();
 	//$('#slide2').addClass('withBackground');

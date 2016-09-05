@@ -22,7 +22,7 @@
         if (file) {
             reader.readAsDataURL(file);
         } else {
-           
+            console.log("Error: Can't upload file!");
         }
 
 
@@ -39,9 +39,9 @@
         if (imageExists($upImage)) {
             $('.loader-container1').addClass('active');
 
-            //$.fn.fullpage.destroy('all');
+            $.fn.fullpage.destroy('all');
             convertHtmlToCanvas();
-            //reinitSlide();
+            reinitSlide();
             $.fn.fullpage.moveTo(0, 3);
         } else {
             animateUploadTake($upload.find('#upload'));
@@ -56,8 +56,6 @@
         showFrige(false);
         $upImage.removeAttr('style');
         $upload.find('#uploadedFile').val('');
-                
-
     }
     
     // Show/Hide bulli frige
@@ -76,8 +74,8 @@
         html2canvas($('.uploadedImageContainer'), {
             onrendered: function(canvas) {
                 theCanvas = canvas;
-                console.log(theCanvas.toDataURL("image/png", 0.1));
-                $('#imagelink').val(canvas.toDataURL("image/png", 1.0));
+				
+                $('#imagelink').val(canvas.toDataURL("image/png"));
 
                 $("#image-out").append(canvas);
             }
