@@ -1,12 +1,11 @@
-.upload, #canvas, .canvas-container { display: none; }
+.upload, #canvas, .canvas-container, #videoSource { display: none; }
 .captured-image img { width: 100%; height: auto; }
 
-#page-loader { display: table; width: 100%; background-color: #78c9ba; }
-#page-loader .loader-inner { display: table-cell; vertical-align: middle; } 
 
-#pf_foto { margin-left: -20px; background-size: cover; background-position: center; }
 
- #video {
+#pf_foto { background-size: cover; background-position: center; }
+
+ #video{
 	position: absolute;
     top: 50%;
     left: 50%;

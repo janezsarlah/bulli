@@ -4,6 +4,7 @@ var $camera = $('.camera'),
 	$upImage = $upload.find('#pf_foto'),
 	$drag = $('.drag'),
 	$fridge = $('.bulli_fridge'),
+	$end = $('.thankyou'),
 	reinitTimer,
 	videoWidth,
 	videoHeight,
@@ -126,6 +127,26 @@ function animateUploadTake(element) {
 	}, 1000);
 }
 /* ANIMATION FUNCTIONS */
+
+/* FACEBOOK SHARE */
+function share() {
+    FB.ui({
+        method: 'feed',
+        link: 'https://oss-dev.av-studio.si/bulli/',
+        caption: 'Parkiraj Bulli hladilnik',
+        description: "Ful je fajn tale hladilnik. Parkirajte ga v svoji kuhinji. :)",
+        app_id: "1085241391529301",
+        picture: "http://oss-dev.av-studio.si/bulli/img/fb_share.png",
+        name: "Parkiraj Bulli hladilnik",
+    }, function(response){
+        //console.log(response);
+        if(response){
+            //console.log("extended takeover time");
+            takeoverTime = 1;
+        }
+    });
+}
+/* FACEBOOK SHARE */
 
 
 

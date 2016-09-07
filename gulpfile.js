@@ -11,8 +11,8 @@ var gulp = require('gulp'),
 
 // Clean folder
 gulp.task('clean', function () {
-   return gulp.src('dist')
-    .pipe(gulp.dest('dist'));
+   return gulp.src('dist', {read:false})
+    .pipe(clean());
 });
 
 // Contat and minify css
@@ -28,45 +28,52 @@ gulp.task('js', function() {
   return gulp.src('js/*.js')
     .pipe(concatjs('scripts.js'))
     //.pipe(jsmin())
-    .pipe(rename({suffix: '.min'}))
+
     .pipe(gulp.dest('dist/js'));
 });
 
 // Copy
 gulp.task('copy', function() {
-   return gulp.src('img/**')
-   	.pipe(gulp.dest('dist/img'))
-   	.pipe(gulp.src('parts/**'))
-   	.pipe(gulp.dest('dist/parts'))
-   	.pipe(gulp.src('languages/**'))
-   	.pipe(gulp.dest('dist/languages'))
-	.pipe(gulp.src('images/**'))
-   	.pipe(gulp.dest('dist/images'))
-   	.pipe(gulp.src('add.php'))
-   	.pipe(gulp.dest('dist'))
-   	.pipe(gulp.src('database'))
-   	.pipe(gulp.dest('dist'))
-   	.pipe(gulp.src('index.php'))
-   	.pipe(gulp.dest('dist'))
-   	.pipe(gulp.src('gallery.php'))
+   return gulp.src([
+	   		'img/**', 
+	   		'images/**', 
+	   		'partials/**', 
+	   		'languages/**', 
+	   		'js/**', 
+	   		'add.php', 
+	   		'index.php', 
+	   		'gallery.php'
+   		], { base: './' })
    	.pipe(gulp.dest('dist'))
 });
 
-// Inject new css and js linls
-gulp.task('inject', function () {
-  var target = gulp.src('dist/index.php');
+// Inject new css
+gulp.task('inject-css', function () {
+  var target = gulp.src('./dist/partials/header.php');
   // It's not necessary to read the files (will speed up things), we're only after their paths: 
-  var sources = gulp.src(['dist/css/styles.css', 'dist/js/scripts.js'], {read: false});
- console.log("test");
-  return target.pipe(inject(sources))
-    .pipe(gulp.dest('dist'));
+  var sources = gulp.src(['./dist/css/styles.css'], {read: false});
+
+  return target.pipe(inject(sources), {relative: true})
+    .pipe(gulp.dest('./dist/partials'));
 });
 
-gulp.task('default', ['clean', 'css', 'js', 'copy-inject'], function() {
+// Inject new js
+gulp.task('inject-js', function () {
+  var target = gulp.src('dist/partials/script.php');
+  // It's not necessary to read the files (will speed up things), we're only after their paths: 
+  var sources = gulp.src(['dist/js/scripts.js'], {read: false});
+
+  return target.pipe(inject(sources), {relative: true})
+    .pipe(gulp.dest('./dist/partials'));
+});
+
+gulp.task('default', ['clean', 'css', 'copy'], function() {
   console.log('Compiled');
 });
 
 gulp.task('fast', ['clean', 'copy', 'inject'], function() {
   console.log('Compiled');
 });
+
+gulp.task('inject', ['inject-css'], function() { console.log('Injected'); });
 

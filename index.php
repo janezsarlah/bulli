@@ -12,6 +12,11 @@ if ( isset($_GET['lang']) && file_exists('languages/'.$_GET['lang'].'.php') ){
 
 ?>
 
+<style type="text/css">
+	#page-loader { display: table; width: 100%; background-color: #78c9ba; }
+	#page-loader .loader-inner { display: table-cell; vertical-align: middle; } 
+</style>
+
 <div id="page-loader">
 <div class="loader-inner">
 	<div class="loader">Loading...</div>
@@ -41,7 +46,7 @@ if ( isset($_GET['lang']) && file_exists('languages/'.$_GET['lang'].'.php') ){
 	<div class="section">
 		<div class="slide" id="slide1" data-anchor="1">
 			<div class="container">
-				<div class="intro">
+				<div class="intro" id="click">
 					<div class="intro__text"><?php echo $lang['intro']; ?></div>
 				</div>
 			</div>
@@ -53,13 +58,12 @@ if ( isset($_GET['lang']) && file_exists('languages/'.$_GET['lang'].'.php') ){
 				<div class="app">
 					<div class="camera">
 						<div class="camera__container">
-							<div class="message"><?php echo $lang['switch']; ?><div class="desision"><span class="d_button close"><?php echo $lang['close_message']; ?></span><span class="d_button switch"><?php echo $lang['switch_message']; ?></span></div></div>
-							<video id="video"></video>
-
+							<video id="video" autoplay></video>
+							<select id="videoSource"></select>
 							<div class="drag"><img id="bul1" class="bulli_fridge" src="img/bulli_1.png" /></div>
 							
 							<div class="captured-image"></div>	
-							
+
 							<div class="canvas-container">
 								<canvas id="canvas"></canvas>	
 								<canvas id="canvas2"></canvas>	

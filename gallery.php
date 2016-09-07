@@ -1,7 +1,5 @@
-<?php include 'partials/header.php'; ?>
-
 <?php 
-	
+	include 'partials/header.php'; 
 	include_once 'database.php';
 
 	$page = isset($_GET["p"]) ? $_GET["p"] : 0;
@@ -14,8 +12,6 @@
 	$query = $db->prepare("SELECT COUNT(id) FROM images");
 	$query->execute();
 	$numOfRecords = $query->fetch()[0];
-
-
 ?>
 <div class="gallery-wrapper">
 	<div class="gallery">
@@ -38,31 +34,28 @@
 	</div>
 </div>
 
-
-
-
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script> 
-<script type="text/javascript" src="js/lightbox-plus-jquery.js"></script>
+<script type="text/javascript" src="js/modules/lightbox-plus-jquery.js"></script>
 <script>
-    
-
     (function($) {
 
-	lightbox.option({
-      'resizeDuration': 200,
-      'wrapAround': true
-    })
+		lightbox.option({
+	      'resizeDuration': 200,
+	      'wrapAround': true
+	    })
 
-	init();
+		var reinitTimer;
 
-    $(window).resize(function () {
-        clearTimeout(reinitTimer);
-        reinitTimer = setTimeout(init, 100);
-    });
+		init();
 
-    function init() {
-    	$('.image div').height($('.image').width());    	
-    }
+	    $(window).resize(function () {
+	        clearTimeout(reinitTimer);
+	        reinitTimer = setTimeout(init, 100);
+	    });
+
+	    function init() {
+	    	$('.image div').height($('.image').width());    	
+	    }
 
     })(jQuery)
 </script>

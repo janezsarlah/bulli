@@ -8,11 +8,11 @@
         });
 
         // Test data
-        /*$('.form .title').on('click', function() {
+        $('.form .title').on('click', function() {
             $('input[name=name]').val("Janez");
             $('input[name=surname]').val("Šarlah");
             $('input[name=email]').val("janez.sarlah@nekaj.si");
-        });*/
+        });
 
         $('.submit').on('click', function() {
             if ($(this).hasClass('disabled'))
@@ -34,6 +34,8 @@
                 
                 var user = getFormData(form);
    
+                //console.log(user);
+
                 addUser(user);
 
             } else {
@@ -41,8 +43,13 @@
             }
         });
 
-        $('.thankyou .fa-backward').on('click', function() {
+        $end.find('.fa-backward').on('click', function() {
             location.reload();
+        });
+
+        // Share page on fb
+        $end.find('.fa-facebook-official').on('click', function() {
+            share();
         });
     });
 

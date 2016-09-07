@@ -25,7 +25,6 @@
             console.log("Error: Can't upload file!");
         }
 
-
     });
 
     // Add trigger to remove previously added photo

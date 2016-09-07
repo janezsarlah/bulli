@@ -1,10 +1,41 @@
+
+var videoElement = document.querySelector('video');
+var videoSelect = document.querySelector('#videoSource');
+
+var selectors = [videoSelect];
+
+var element = document.getElementById("click");
+
 (function($){
-
-	
-
 	// Put event listeners into place
 	window.addEventListener("DOMContentLoaded", function() {
-		// Grab elements, create settings, etc.
+
+		if (isMobile()) {
+			console.log(isMobile());
+			element.addEventListener('click', function() { 
+			    if (window.stream) {
+			      window.stream.getTracks().forEach(function(track) {
+			        track.stop();
+			      });
+			    }
+
+				if (videoSource.options.length > 1) {
+				    var constraints = {
+					    video: {deviceId: videoSource.options[1].value ? {exact: videoSource.options[1].value} : undefined},
+				    };
+				} else {
+					var constraints = {
+					    video: {deviceId: videoSource.value ? {exact: videoSource.value} : undefined},
+				    };
+				}
+
+		
+			    navigator.mediaDevices.getUserMedia(constraints).then(gotStream).then(gotDevices).catch(handleError);
+
+			}, false);
+
+		}
+
 		initCamera();
 		
 	}, false);
@@ -29,11 +60,11 @@
 // Put video listeners into place
 function initCamera() {
 
-
 	if (isApple()) {
 		switcheToUpload();
 		return;
 	}
+
 
 	var ua = window.navigator.userAgent;
     var msie = ua.indexOf("MSIE ");
@@ -44,12 +75,12 @@ function initCamera() {
 		return;
     }
 
+	if (isMobile) {
+		start();
 
+	} else {
 
-	//switcheToUpload();
-	//return;
-
-	if(navigator.getUserMedia) { // Standard
+		if(navigator.getUserMedia) { // Standard
 		navigator.getUserMedia(videoObj, 
 			function(stream) {
 				video.src = stream;
@@ -59,40 +90,47 @@ function initCamera() {
 		}, 	function(err) {
 	        	console.log("The following error occured: " + err.name);
 	        	switcheToUpload();
-	return;
+		return;
 
-	      	}
-	    );
-	} else if(navigator.webkitGetUserMedia) { // WebKit-prefixed
-		navigator.webkitGetUserMedia(videoObj, function(stream){
-			video.src = window.URL.createObjectURL(stream);
-			video.onloadedmetadata = function(e) {
-			  video.play();
-			};
-		}, function(err) {
-	         console.log("The following error occured: " + err.name);
-	         switcheToUpload();
-	return;
+		      	}
+		    );
+		} else if(navigator.webkitGetUserMedia) { // WebKit-prefixed
+			navigator.webkitGetUserMedia(videoObj, function(stream){
+				video.src = window.URL.createObjectURL(stream);
+				video.onloadedmetadata = function(e) {
+				  video.play();
+				};
+			}, function(err) {
+		         console.log("The following error occured: " + err.name);
+		         switcheToUpload();
+		return;
 
-	      });
-	}
-	else if(navigator.mozGetUserMedia) { // Firefox-prefixed
-		navigator.mozGetUserMedia(videoObj, function(stream){
-			video.src = window.URL.createObjectURL(stream);
-			video.onloadedmetadata = function(e) {
-			  video.play();
-			};
-		},function(err) {
-	         console.log("The following error occured: " + err.name);
-	         switcheToUpload();
-			return;
+		      });
+		}
+		else if(navigator.mozGetUserMedia) { // Firefox-prefixed
+			navigator.mozGetUserMedia(videoObj, function(stream){
+				video.src = window.URL.createObjectURL(stream);
+				video.onloadedmetadata = function(e) {
+				  video.play();
+				};
+			},function(err) {
+		         console.log("The following error occured: " + err.name);
+		         switcheToUpload();
+				return;
 
 	      } );
 	}
+	}
+
+
+	
+
+
+
 }
 /* INIT CAMERA */
 
-// Device dos't support camera
+// Device does't support camera
 function switcheToUpload() {
 	$camera.hide();
 	$upload.show();
@@ -161,3 +199,75 @@ function converCanvasToBackground() {
 	//$capturedImage.append(img);
 }
 /* TAKE PICTURE AND HANDLE */
+
+/* CAMERA RELATED FUNCTIONS */
+function gotDevices(deviceInfos) {
+  // Handles being called several times to update labels. Preserve values.
+
+  var values = selectors.map(function(select) {
+    return select.value;
+  });
+
+  // Remove duplicates from dropdown
+  selectors.forEach(function(select) {
+    while (select.firstChild) {
+      select.removeChild(select.firstChild);
+    }
+  });
+
+
+
+  for (var i = 0; i !== deviceInfos.length; ++i) {
+    var deviceInfo = deviceInfos[i];
+    var option = document.createElement('option');
+    
+    option.value = deviceInfo.deviceId;
+
+    if (deviceInfo.kind === 'videoinput') {
+      option.text = deviceInfo.label || 'camera ' + (videoSelect.length + 1);
+      videoSelect.appendChild(option);
+    } 
+  }
+
+  selectors.forEach(function(select, selectorIndex) {
+    if (Array.prototype.slice.call(select.childNodes).some(function(n) {
+      return n.value === values[selectorIndex];
+    })) {
+      select.value = values[selectorIndex];
+    }
+  });
+
+}
+
+
+function gotStream(stream) {
+  window.stream = stream; // make stream available to console
+  videoElement.srcObject = stream;
+  // Refresh button list in case labels have become available
+  return navigator.mediaDevices.enumerateDevices();
+}
+
+
+function start() {
+
+  if (window.stream) {
+    window.stream.getTracks().forEach(function(track) {
+      track.stop();
+    });
+  }
+
+  var videoSource = videoSelect.value;
+
+  var constraints = {
+    video: {deviceId: videoSource ? {exact: videoSource} : undefined},
+  };
+
+  navigator.mediaDevices.getUserMedia(constraints).then(gotStream).then(gotDevices).catch(handleError);
+}
+
+function handleError(error) {
+  console.log('navigator.getUserMedia error: ', error);
+  switcheToUpload();
+  return;
+}
+/* CAMERA RELATED FUNCTIONS */
